@@ -4,17 +4,16 @@
 from watchdog.observers import Observer
 from watchdog.events import *
 import hashlib
+import json
 import re
 import sys
 import time
-import requests
-from requests_toolbelt import SSLAdapter
+from svc.SoftVersionControl import *
+from thrift import Thrift
+from thrift.transport import TSocket
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
 
-# 设置HTTPS
-adapter = SSLAdapter('TLSv1.2')  # 设置证书验证方式为TLSv1.2
-r = requests.Session()
-r.mount('https://', adapter)  # 设置HTTPS的SSL适配器
-ca_file = '../certs/chain-ca.pem'  # 设置根证书
 
 WINDOWS = os.name == "nt"
 LINUX = sys.platform.startswith("linux")
@@ -26,6 +25,7 @@ elif OSX:
     os_name = "Darwin"
 else:
     os_name = "linux"
+client = Client(None)  # 连接服务器的客户端
 
 
 class FileEventHandler(FileSystemEventHandler):
@@ -58,12 +58,33 @@ class FileEventHandler(FileSystemEventHandler):
             pass
 
 
+def conn_server(ip, port):
+    while True:
+        try:
+            transport = TSocket.TSocket(ip, port)
+            transport = TTransport.TBufferedTransport(transport)
+            protocol = TBinaryProtocol.TBinaryProtocol(transport)
+            client = Client(protocol)
+            transport.open()
+            return client
+        except Thrift.TException as e:
+            # print(e)
+            continue
+
+
+def init():
+    global client
+    ip = "localhost"
+    port = 9234
+    client = conn_server(ip, port)
+
+
 def analysis_created_file(file):
     # 获取被创建的文件名
     filename = file.split("/")[-1]
     match_str = r"\.(jar|exe)$"
     if re.search(match_str, filename) is not None:
-        print(filename[:-4] + "程序正在安装！")
+        # print(filename[:-4] + "程序正在安装！")
         # 开始校验可执行文件
         res = verify_md5(file)
         if res["ret_code"] != 0:
@@ -72,7 +93,7 @@ def analysis_created_file(file):
 
 
 def verify_md5(filename):
-    global ca_file, os_name
+    global client
     soft_name = filename.split("/")[-1][:-4]  # 获取无后缀的软件名
     soft_id = soft_name + "_" + os_name
     with open(filename, 'rb') as file:
@@ -81,16 +102,12 @@ def verify_md5(filename):
         md5.update(data)
         soft_md5 = md5.hexdigest()
 
-    verify_soft_code_api = "https://127.0.0.1:5000/api/soft/verify_soft_code"
-    data = {"softID": soft_id, "type": 0, "code": soft_md5}
-    r = requests.post(verify_soft_code_api, json=data, verify=ca_file)
-    if r.status_code != 200:
-        return {"ret_code": r.status_code, "msg": "error"}
-    print(r.json())
-    return r.json()
+    r = client.verify_soft_code(soft_id, 0, soft_md5)
+    return json.loads(r)
 
 
 def install_soft_control():
+    init()
     observer = Observer()
     event_handler = FileEventHandler()
     observer.schedule(event_handler, "/Users/walter/Downloads", True)

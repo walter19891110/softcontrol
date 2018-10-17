@@ -117,6 +117,200 @@ class SoftVersionControlHandler:
         result = {"ret_code": ret_code, "msg": msg, "softlist": soft_dict}
         return json.dumps(result)
 
+    def add_soft_info(self, soft_dict):
+        """
+        添加软件信息
+
+        :param soft_dict:
+            {
+             softid:软件ID
+             softname:软件名称
+             osname:软件运行的操作系统
+             softmode:软件模式
+             setupname:安装包名
+             setupcode:安装包校验码
+             mainfile:主程序文件名
+             maincode:主程序文件校验码
+             desc:软件描述
+            }
+        :return:
+            {"ret_code": ret_code, "msg": msg}
+        """
+        ret_code = 0
+        msg = "OK"
+
+        soft_id = soft_dict.softid
+        if session.query(SoftInfo).filter_by(softID=soft_id).first() is not None:
+            ret_code = 1
+            msg = "softID already exist!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+        else:
+            soft_info = SoftInfo(softID=soft_id)
+
+            soft_info.softname = soft_dict.softname
+            soft_info.osname = soft_dict.osname
+            soft_info.softmode = soft_dict.softmode
+            soft_info.setupname = soft_dict.setupname
+            soft_info.add_setupcode(soft_dict.setupcode)
+            soft_info.mainfile = soft_dict.mainfile
+            soft_info.add_maincode(soft_dict.maincode)
+            soft_info.desc = soft_dict.desc
+
+            session.add(soft_info)
+            session.commit()
+
+        result = {"ret_code": ret_code, "msg": msg}
+        return json.dumps(result)
+
+    def modify_soft_mode(self, soft_id, soft_mode):
+        """
+        修改软件信息
+
+        :param soft_id:
+           软件ID
+        :param soft_mode:
+             soft_mode:软件模式
+        :return:
+            {"ret_code": ret_code, "msg": msg}
+        """
+        ret_code = 0
+        msg = "OK"
+
+        if soft_id is None or soft_mode is None:
+            ret_code = 1
+            msg = "missing arguments!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        soft_info = session.query(SoftInfo).filter_by(softID=soft_id).first()
+        if soft_info is None:
+            ret_code = 1
+            msg = "soft not exist!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        soft_info.softmode = soft_mode
+        session.commit()
+        result = {"ret_code": ret_code, "msg": msg}
+        return json.dumps(result)
+
+    def del_soft_info(self, soft_id):
+        """
+        删除软件信息
+
+        :param soft_id:
+            软件ID
+        :return:
+            {"ret_code": ret_code, "msg": msg}
+        """
+        ret_code = 0
+        msg = "OK"
+        if soft_id is None:
+            ret_code = 1
+            msg = "missing arguments!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        soft_info = session.query(SoftInfo).filter_by(softID=soft_id).first()
+        if soft_info is None:
+            ret_code = 1
+            msg = "soft not exist!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        session.delete(soft_info)
+        session.commit()
+
+        result = {"ret_code": ret_code, "msg": msg}
+        return json.dumps(result)
+
+    def add_soft_code(self, soft_id, verify_type, verify_code):
+        """
+        添加软件校验码，verify_type为0，安装包校验码，verify_type为1 主程序文件校验码
+
+        :param soft_id:
+            软件ID
+        :param verify_type:
+            校验码类型，0为安装包校验码，1为主程序文件校验码
+        :param verify_code:
+            软件描述
+        :return:
+            {"ret_code": ret_code, "msg": msg}
+        """
+        ret_code = 0
+        msg = "OK"
+
+        if soft_id is None or verify_type is None or verify_code is None:
+            ret_code = 1
+            msg = "missing arguments!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        soft_info = session.query(SoftInfo).filter_by(softID=soft_id).first()
+        if soft_info is None:
+            ret_code = 1
+            msg = "soft not exist!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        if verify_type == 0:
+            soft_info.add_setupcode(verify_code)
+        elif verify_type == 1:
+            soft_info.add_maincode(verify_code)
+        else:
+            ret_code = 2
+            msg = "type value err!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        session.commit()
+        result = {"ret_code": ret_code, "msg": msg}
+        return json.dumps(result)
+
+    def del_soft_code(self, soft_id, verify_type, verify_code):
+        """
+        删除软件校验码，verify_type为0，安装包校验码，verify_type为1 主程序文件校验码
+
+        :param soft_id:
+            软件ID
+        :param verify_type:
+            校验码类型，0为安装包校验码，1为主程序文件校验码
+        :param verify_code:
+            软件描述
+        :return:
+            {"ret_code": ret_code, "msg": msg}
+        """
+        ret_code = 0
+        msg = "OK"
+
+        if soft_id is None or verify_type is None or verify_code is None:
+            ret_code = 1
+            msg = "missing arguments!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        soft_info = session.query(SoftInfo).filter_by(softID=soft_id).first()
+        if soft_info is None:
+            ret_code = 1
+            msg = "soft not exist!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        if verify_type == 0:
+            soft_info.del_setupcode(verify_code)
+        elif verify_type == 1:
+            soft_info.del_maincode(verify_code)
+        else:
+            ret_code = 2
+            msg = "type value err!"
+            result = {"ret_code": ret_code, "msg": msg}
+            return json.dumps(result)
+
+        session.commit()
+        result = {"ret_code": ret_code, "msg": msg}
+        return json.dumps(result)
+
 
 def run():
     """服务运行代码"""

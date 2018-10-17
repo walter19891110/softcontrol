@@ -16,6 +16,11 @@ from thrift.transport import TTransport
 
 
 class Iface(object):
+    """
+    定义服务service。
+    1、服务可以继承，只能单继承
+    2、引用其他thrift文件的服务时需要加上文件名。如： share.haredService;share就是文件名
+    """
     def verify_soft_code(self, soft_id, verify_type, verify_code):
         """
         Parameters:
@@ -35,8 +40,53 @@ class Iface(object):
     def get_soft_list(self):
         pass
 
+    def add_soft_info(self, soft_dict):
+        """
+        Parameters:
+         - soft_dict
+        """
+        pass
+
+    def modify_soft_mode(self, soft_id, soft_mode):
+        """
+        Parameters:
+         - soft_id
+         - soft_mode
+        """
+        pass
+
+    def del_soft_info(self, soft_id):
+        """
+        Parameters:
+         - soft_id
+        """
+        pass
+
+    def add_soft_code(self, soft_id, verify_type, verify_code):
+        """
+        Parameters:
+         - soft_id
+         - verify_type
+         - verify_code
+        """
+        pass
+
+    def del_soft_code(self, soft_id, verify_type, verify_code):
+        """
+        Parameters:
+         - soft_id
+         - verify_type
+         - verify_code
+        """
+        pass
+
 
 class Client(Iface):
+    """
+    定义服务service。
+    1、服务可以继承，只能单继承
+    2、引用其他thrift文件的服务时需要加上文件名。如： share.haredService;share就是文件名
+    """
     def __init__(self, iprot, oprot=None):
         self._iprot = self._oprot = iprot
         if oprot is not None:
@@ -135,6 +185,171 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "get_soft_list failed: unknown result")
 
+    def add_soft_info(self, soft_dict):
+        """
+        Parameters:
+         - soft_dict
+        """
+        self.send_add_soft_info(soft_dict)
+        return self.recv_add_soft_info()
+
+    def send_add_soft_info(self, soft_dict):
+        self._oprot.writeMessageBegin('add_soft_info', TMessageType.CALL, self._seqid)
+        args = add_soft_info_args()
+        args.soft_dict = soft_dict
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_add_soft_info(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = add_soft_info_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "add_soft_info failed: unknown result")
+
+    def modify_soft_mode(self, soft_id, soft_mode):
+        """
+        Parameters:
+         - soft_id
+         - soft_mode
+        """
+        self.send_modify_soft_mode(soft_id, soft_mode)
+        return self.recv_modify_soft_mode()
+
+    def send_modify_soft_mode(self, soft_id, soft_mode):
+        self._oprot.writeMessageBegin('modify_soft_mode', TMessageType.CALL, self._seqid)
+        args = modify_soft_mode_args()
+        args.soft_id = soft_id
+        args.soft_mode = soft_mode
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_modify_soft_mode(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = modify_soft_mode_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "modify_soft_mode failed: unknown result")
+
+    def del_soft_info(self, soft_id):
+        """
+        Parameters:
+         - soft_id
+        """
+        self.send_del_soft_info(soft_id)
+        return self.recv_del_soft_info()
+
+    def send_del_soft_info(self, soft_id):
+        self._oprot.writeMessageBegin('del_soft_info', TMessageType.CALL, self._seqid)
+        args = del_soft_info_args()
+        args.soft_id = soft_id
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_del_soft_info(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = del_soft_info_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "del_soft_info failed: unknown result")
+
+    def add_soft_code(self, soft_id, verify_type, verify_code):
+        """
+        Parameters:
+         - soft_id
+         - verify_type
+         - verify_code
+        """
+        self.send_add_soft_code(soft_id, verify_type, verify_code)
+        return self.recv_add_soft_code()
+
+    def send_add_soft_code(self, soft_id, verify_type, verify_code):
+        self._oprot.writeMessageBegin('add_soft_code', TMessageType.CALL, self._seqid)
+        args = add_soft_code_args()
+        args.soft_id = soft_id
+        args.verify_type = verify_type
+        args.verify_code = verify_code
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_add_soft_code(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = add_soft_code_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "add_soft_code failed: unknown result")
+
+    def del_soft_code(self, soft_id, verify_type, verify_code):
+        """
+        Parameters:
+         - soft_id
+         - verify_type
+         - verify_code
+        """
+        self.send_del_soft_code(soft_id, verify_type, verify_code)
+        return self.recv_del_soft_code()
+
+    def send_del_soft_code(self, soft_id, verify_type, verify_code):
+        self._oprot.writeMessageBegin('del_soft_code', TMessageType.CALL, self._seqid)
+        args = del_soft_code_args()
+        args.soft_id = soft_id
+        args.verify_type = verify_type
+        args.verify_code = verify_code
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_del_soft_code(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = del_soft_code_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "del_soft_code failed: unknown result")
+
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
@@ -143,6 +358,11 @@ class Processor(Iface, TProcessor):
         self._processMap["verify_soft_code"] = Processor.process_verify_soft_code
         self._processMap["get_soft_info"] = Processor.process_get_soft_info
         self._processMap["get_soft_list"] = Processor.process_get_soft_list
+        self._processMap["add_soft_info"] = Processor.process_add_soft_info
+        self._processMap["modify_soft_mode"] = Processor.process_modify_soft_mode
+        self._processMap["del_soft_info"] = Processor.process_del_soft_info
+        self._processMap["add_soft_code"] = Processor.process_add_soft_code
+        self._processMap["del_soft_code"] = Processor.process_del_soft_code
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -212,6 +432,101 @@ class Processor(Iface, TProcessor):
             logging.exception(ex)
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("get_soft_list", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_add_soft_info(self, seqid, iprot, oprot):
+        args = add_soft_info_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = add_soft_info_result()
+        try:
+            result.success = self._handler.add_soft_info(args.soft_dict)
+            msg_type = TMessageType.REPLY
+        except (TTransport.TTransportException, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as ex:
+            msg_type = TMessageType.EXCEPTION
+            logging.exception(ex)
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("add_soft_info", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_modify_soft_mode(self, seqid, iprot, oprot):
+        args = modify_soft_mode_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = modify_soft_mode_result()
+        try:
+            result.success = self._handler.modify_soft_mode(args.soft_id, args.soft_mode)
+            msg_type = TMessageType.REPLY
+        except (TTransport.TTransportException, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as ex:
+            msg_type = TMessageType.EXCEPTION
+            logging.exception(ex)
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("modify_soft_mode", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_del_soft_info(self, seqid, iprot, oprot):
+        args = del_soft_info_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = del_soft_info_result()
+        try:
+            result.success = self._handler.del_soft_info(args.soft_id)
+            msg_type = TMessageType.REPLY
+        except (TTransport.TTransportException, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as ex:
+            msg_type = TMessageType.EXCEPTION
+            logging.exception(ex)
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("del_soft_info", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_add_soft_code(self, seqid, iprot, oprot):
+        args = add_soft_code_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = add_soft_code_result()
+        try:
+            result.success = self._handler.add_soft_code(args.soft_id, args.verify_type, args.verify_code)
+            msg_type = TMessageType.REPLY
+        except (TTransport.TTransportException, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as ex:
+            msg_type = TMessageType.EXCEPTION
+            logging.exception(ex)
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("add_soft_code", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_del_soft_code(self, seqid, iprot, oprot):
+        args = del_soft_code_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = del_soft_code_result()
+        try:
+            result.success = self._handler.del_soft_code(args.soft_id, args.verify_type, args.verify_code)
+            msg_type = TMessageType.REPLY
+        except (TTransport.TTransportException, KeyboardInterrupt, SystemExit):
+            raise
+        except Exception as ex:
+            msg_type = TMessageType.EXCEPTION
+            logging.exception(ex)
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("del_soft_code", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -560,6 +875,662 @@ class get_soft_list_result(object):
             oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
             return
         oprot.writeStructBegin('get_soft_list_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class add_soft_info_args(object):
+    """
+    Attributes:
+     - soft_dict
+    """
+
+    thrift_spec = (
+        None,  # 0
+        (1, TType.STRUCT, 'soft_dict', (SoftInfoDict, SoftInfoDict.thrift_spec), None, ),  # 1
+    )
+
+    def __init__(self, soft_dict=None,):
+        self.soft_dict = soft_dict
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.soft_dict = SoftInfoDict()
+                    self.soft_dict.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('add_soft_info_args')
+        if self.soft_dict is not None:
+            oprot.writeFieldBegin('soft_dict', TType.STRUCT, 1)
+            self.soft_dict.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class add_soft_info_result(object):
+    """
+    Attributes:
+     - success
+    """
+
+    thrift_spec = (
+        (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    )
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('add_soft_info_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class modify_soft_mode_args(object):
+    """
+    Attributes:
+     - soft_id
+     - soft_mode
+    """
+
+    thrift_spec = (
+        None,  # 0
+        (1, TType.STRING, 'soft_id', 'UTF8', None, ),  # 1
+        (2, TType.I32, 'soft_mode', None, None, ),  # 2
+    )
+
+    def __init__(self, soft_id=None, soft_mode=None,):
+        self.soft_id = soft_id
+        self.soft_mode = soft_mode
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.soft_id = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.soft_mode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('modify_soft_mode_args')
+        if self.soft_id is not None:
+            oprot.writeFieldBegin('soft_id', TType.STRING, 1)
+            oprot.writeString(self.soft_id.encode('utf-8') if sys.version_info[0] == 2 else self.soft_id)
+            oprot.writeFieldEnd()
+        if self.soft_mode is not None:
+            oprot.writeFieldBegin('soft_mode', TType.I32, 2)
+            oprot.writeI32(self.soft_mode)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class modify_soft_mode_result(object):
+    """
+    Attributes:
+     - success
+    """
+
+    thrift_spec = (
+        (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    )
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('modify_soft_mode_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class del_soft_info_args(object):
+    """
+    Attributes:
+     - soft_id
+    """
+
+    thrift_spec = (
+        None,  # 0
+        (1, TType.STRING, 'soft_id', 'UTF8', None, ),  # 1
+    )
+
+    def __init__(self, soft_id=None,):
+        self.soft_id = soft_id
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.soft_id = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('del_soft_info_args')
+        if self.soft_id is not None:
+            oprot.writeFieldBegin('soft_id', TType.STRING, 1)
+            oprot.writeString(self.soft_id.encode('utf-8') if sys.version_info[0] == 2 else self.soft_id)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class del_soft_info_result(object):
+    """
+    Attributes:
+     - success
+    """
+
+    thrift_spec = (
+        (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    )
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('del_soft_info_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class add_soft_code_args(object):
+    """
+    Attributes:
+     - soft_id
+     - verify_type
+     - verify_code
+    """
+
+    thrift_spec = (
+        None,  # 0
+        (1, TType.STRING, 'soft_id', 'UTF8', None, ),  # 1
+        (2, TType.I32, 'verify_type', None, None, ),  # 2
+        (3, TType.STRING, 'verify_code', 'UTF8', None, ),  # 3
+    )
+
+    def __init__(self, soft_id=None, verify_type=None, verify_code=None,):
+        self.soft_id = soft_id
+        self.verify_type = verify_type
+        self.verify_code = verify_code
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.soft_id = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.verify_type = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.STRING:
+                    self.verify_code = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('add_soft_code_args')
+        if self.soft_id is not None:
+            oprot.writeFieldBegin('soft_id', TType.STRING, 1)
+            oprot.writeString(self.soft_id.encode('utf-8') if sys.version_info[0] == 2 else self.soft_id)
+            oprot.writeFieldEnd()
+        if self.verify_type is not None:
+            oprot.writeFieldBegin('verify_type', TType.I32, 2)
+            oprot.writeI32(self.verify_type)
+            oprot.writeFieldEnd()
+        if self.verify_code is not None:
+            oprot.writeFieldBegin('verify_code', TType.STRING, 3)
+            oprot.writeString(self.verify_code.encode('utf-8') if sys.version_info[0] == 2 else self.verify_code)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class add_soft_code_result(object):
+    """
+    Attributes:
+     - success
+    """
+
+    thrift_spec = (
+        (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    )
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('add_soft_code_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class del_soft_code_args(object):
+    """
+    Attributes:
+     - soft_id
+     - verify_type
+     - verify_code
+    """
+
+    thrift_spec = (
+        None,  # 0
+        (1, TType.STRING, 'soft_id', 'UTF8', None, ),  # 1
+        (2, TType.I32, 'verify_type', None, None, ),  # 2
+        (3, TType.STRING, 'verify_code', 'UTF8', None, ),  # 3
+    )
+
+    def __init__(self, soft_id=None, verify_type=None, verify_code=None,):
+        self.soft_id = soft_id
+        self.verify_type = verify_type
+        self.verify_code = verify_code
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.soft_id = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.verify_type = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.STRING:
+                    self.verify_code = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('del_soft_code_args')
+        if self.soft_id is not None:
+            oprot.writeFieldBegin('soft_id', TType.STRING, 1)
+            oprot.writeString(self.soft_id.encode('utf-8') if sys.version_info[0] == 2 else self.soft_id)
+            oprot.writeFieldEnd()
+        if self.verify_type is not None:
+            oprot.writeFieldBegin('verify_type', TType.I32, 2)
+            oprot.writeI32(self.verify_type)
+            oprot.writeFieldEnd()
+        if self.verify_code is not None:
+            oprot.writeFieldBegin('verify_code', TType.STRING, 3)
+            oprot.writeString(self.verify_code.encode('utf-8') if sys.version_info[0] == 2 else self.verify_code)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class del_soft_code_result(object):
+    """
+    Attributes:
+     - success
+    """
+
+    thrift_spec = (
+        (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    )
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('del_soft_code_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.STRING, 0)
             oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)

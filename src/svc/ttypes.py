@@ -11,3 +11,165 @@ from thrift.protocol.TProtocol import TProtocolException
 import sys
 
 from thrift.transport import TTransport
+
+
+class SoftInfoDict(object):
+    """
+    定义数据结构，类似面向对象编程中的类
+    1、属性需要一个表示数字（如：1，2，3）；这个数字在同个作用域内不能重复
+    2、属性默认都是必输属性，如果需要属性可选在属性前面加上optional关键字
+    3、可以为属性指定默认值，格式是在属性名称后面用等号。如：num1 =0,0就是num1的默认值
+
+
+    Attributes:
+     - softid
+     - softname
+     - osname
+     - softmode
+     - setupname
+     - setupcode
+     - mainfile
+     - maincode
+     - desc
+    """
+
+    thrift_spec = (
+        None,  # 0
+        (1, TType.STRING, 'softid', 'UTF8', None, ),  # 1
+        (2, TType.STRING, 'softname', 'UTF8', None, ),  # 2
+        (3, TType.STRING, 'osname', 'UTF8', None, ),  # 3
+        (4, TType.I32, 'softmode', None, None, ),  # 4
+        (5, TType.STRING, 'setupname', 'UTF8', None, ),  # 5
+        (6, TType.STRING, 'setupcode', 'UTF8', None, ),  # 6
+        (7, TType.STRING, 'mainfile', 'UTF8', None, ),  # 7
+        (8, TType.STRING, 'maincode', 'UTF8', None, ),  # 8
+        (9, TType.STRING, 'desc', 'UTF8', None, ),  # 9
+    )
+
+    def __init__(self, softid=None, softname=None, osname=None, softmode=None, setupname=None, setupcode=None, mainfile=None, maincode=None, desc=None,):
+        self.softid = softid
+        self.softname = softname
+        self.osname = osname
+        self.softmode = softmode
+        self.setupname = setupname
+        self.setupcode = setupcode
+        self.mainfile = mainfile
+        self.maincode = maincode
+        self.desc = desc
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, (self.__class__, self.thrift_spec))
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.softid = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.softname = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.STRING:
+                    self.osname = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.I32:
+                    self.softmode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.STRING:
+                    self.setupname = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.STRING:
+                    self.setupcode = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 7:
+                if ftype == TType.STRING:
+                    self.mainfile = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.STRING:
+                    self.maincode = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.STRING:
+                    self.desc = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
+            return
+        oprot.writeStructBegin('SoftInfoDict')
+        if self.softid is not None:
+            oprot.writeFieldBegin('softid', TType.STRING, 1)
+            oprot.writeString(self.softid.encode('utf-8') if sys.version_info[0] == 2 else self.softid)
+            oprot.writeFieldEnd()
+        if self.softname is not None:
+            oprot.writeFieldBegin('softname', TType.STRING, 2)
+            oprot.writeString(self.softname.encode('utf-8') if sys.version_info[0] == 2 else self.softname)
+            oprot.writeFieldEnd()
+        if self.osname is not None:
+            oprot.writeFieldBegin('osname', TType.STRING, 3)
+            oprot.writeString(self.osname.encode('utf-8') if sys.version_info[0] == 2 else self.osname)
+            oprot.writeFieldEnd()
+        if self.softmode is not None:
+            oprot.writeFieldBegin('softmode', TType.I32, 4)
+            oprot.writeI32(self.softmode)
+            oprot.writeFieldEnd()
+        if self.setupname is not None:
+            oprot.writeFieldBegin('setupname', TType.STRING, 5)
+            oprot.writeString(self.setupname.encode('utf-8') if sys.version_info[0] == 2 else self.setupname)
+            oprot.writeFieldEnd()
+        if self.setupcode is not None:
+            oprot.writeFieldBegin('setupcode', TType.STRING, 6)
+            oprot.writeString(self.setupcode.encode('utf-8') if sys.version_info[0] == 2 else self.setupcode)
+            oprot.writeFieldEnd()
+        if self.mainfile is not None:
+            oprot.writeFieldBegin('mainfile', TType.STRING, 7)
+            oprot.writeString(self.mainfile.encode('utf-8') if sys.version_info[0] == 2 else self.mainfile)
+            oprot.writeFieldEnd()
+        if self.maincode is not None:
+            oprot.writeFieldBegin('maincode', TType.STRING, 8)
+            oprot.writeString(self.maincode.encode('utf-8') if sys.version_info[0] == 2 else self.maincode)
+            oprot.writeFieldEnd()
+        if self.desc is not None:
+            oprot.writeFieldBegin('desc', TType.STRING, 9)
+            oprot.writeString(self.desc.encode('utf-8') if sys.version_info[0] == 2 else self.desc)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)

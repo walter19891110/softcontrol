@@ -3,34 +3,55 @@
 :module:
 """
 import hashlib
+import os
 import platform
 import psutil
 import re
-import requests
-from requests_toolbelt import SSLAdapter
 import time
+import json
+from svc.SoftVersionControl import *
+from thrift import Thrift
+from thrift.transport import TSocket
+from thrift.transport import TTransport
+from thrift.protocol import TBinaryProtocol
 
 
 class RunSvc(object):
 
     def __init__(self):
-        self.os_name = platform.system()  # 获取系统平台名，Linux、Windows
-        self.ca_file = "../certs/chain-ca.pem"  # 设置根证书
-        adapter = SSLAdapter('TLSv1.2')  # 设置证书验证方式为TLSv1.2
-        r = requests.Session()
-        r.mount('https://', adapter)  # 设置HTTPS的SSL适配器
-        self.soft_list = list()
-        self.user_list = list()
+        self.os_name = "linux"  # 获取系统平台名，Linux、Windows
+        self.client = Client(None)  # 初始化客户端
+        self.soft_list = list()  # 免于版本控制的软件列表
+        self.user_list = list()  # 监控的用户列表
 
     def init(self):
         """从服务端读取免于版本控制的软件列表"""
-        get_soft_list_api = "https://127.0.0.1:5000/api/soft/get_soft_list"
+        if os.name == "nt":
+            self.os_name = "windows"
+        elif sys.platform.startswith("darwin"):  # OSX
+            self.os_name = "Darwin"
+        else:
+            self.os_name = "linux"
+
+        conn_flag = True
+        while conn_flag:
+            try:
+                transport = TSocket.TSocket('localhost', 9234)
+                transport = TTransport.TBufferedTransport(transport)
+                protocol = TBinaryProtocol.TBinaryProtocol(transport)
+                self.client = Client(protocol)
+                transport.open()
+                conn_flag = False
+            except Thrift.TException as e:
+                # print(e)
+                continue
+
         try:
-            r = requests.get(get_soft_list_api, verify=self.ca_file)
+            r = self.client.get_soft_list()
         except Exception as e:
             print(e)
             return 1
-        self.soft_list = r.json()["softlist"].keys()
+        self.soft_list = json.loads(r)["softlist"].keys()
         self.user_list.append("walter")
         return 0
 
@@ -88,13 +109,8 @@ class RunSvc(object):
             md5.update(data)
             soft_md5 = md5.hexdigest()
 
-        verify_soft_code_api = "https://127.0.0.1:5000/api/soft/verify_soft_code"
-        data = {"softID": soft_id, "type": 1, "code": soft_md5}
-        r = requests.post(verify_soft_code_api, json=data, verify=self.ca_file)
-        # print(r.status_code)
-        if r.status_code != 200:
-            return {"ret_code": r.status_code, "msg": "error"}
-        return r.json()
+        r = self.client.verify_soft_code(soft_id, 1, soft_md5)
+        return json.loads(r)
 
 
 def running_soft_control():
